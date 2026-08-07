@@ -25,7 +25,10 @@
                 <span>Yordan<span class="gradient-text">.admin</span></span>
             </a>
 
-            <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <button id="adminChangePassBtn" onclick="openChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem; display: none;">
+                    🔑 Cambiar Contraseña
+                </button>
                 <button id="adminLogoutBtn" onclick="handleAdminLogout()" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem; display: none; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">
                     🔒 Cerrar Sesión
                 </button>
@@ -78,7 +81,10 @@
                     </p>
                 </div>
                 
-                <div style="display: flex; gap: 0.6rem;">
+                <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                    <button onclick="openChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem;">
+                        🔑 Cambiar Contraseña
+                    </button>
                     <button onclick="handleExportProjectsConfig()" class="btn btn-primary" style="font-size: 0.85rem;">
                         📋 Exportar portfolio-data.js
                     </button>
@@ -205,6 +211,48 @@
 
         </div>
     </main>
+
+    <!-- 🔑 MODAL PARA CAMBIAR CONTRASEÑA -->
+    <div class="demo-overlay" id="changePasswordModal">
+        <div class="demo-modal-container" style="max-width: 480px;">
+            <div class="demo-modal-header">
+                <div class="demo-modal-title">
+                    <span style="font-size: 1.3rem;">🔑</span>
+                    <div>
+                        <h3>Cambiar Contraseña Maestra</h3>
+                        <div style="font-size: 0.78rem; color: var(--text-secondary);">Actualiza la clave de acceso al panel admin</div>
+                    </div>
+                </div>
+                <button class="demo-close-btn" onclick="closeChangePasswordModal()" title="Cerrar">✕</button>
+            </div>
+
+            <div class="demo-modal-body">
+                <form id="changePasswordForm" onsubmit="handleSaveNewPasswordForm(event)" style="display: flex; flex-direction: column; gap: 1.1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Contraseña Actual *</label>
+                        <input type="password" id="currentAdminPassword" required placeholder="Introduce tu contraseña actual..." style="width: 100%; padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Nueva Contraseña * (Mínimo 6 caracteres)</label>
+                        <input type="password" id="newAdminPassword" required minlength="6" placeholder="Introduce la nueva contraseña..." style="width: 100%; padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Confirmar Nueva Contraseña *</label>
+                        <input type="password" id="confirmAdminPassword" required minlength="6" placeholder="Repite la nueva contraseña..." style="width: 100%; padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
+                    </div>
+
+                    <div id="changePasswordAlert" style="font-size: 0.85rem; display: none;"></div>
+
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 0.5rem;">
+                        <button type="button" onclick="closeChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem;">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" style="font-size: 0.85rem;">💾 Actualizar Contraseña</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="js/github-service.js"></script>
