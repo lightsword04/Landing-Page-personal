@@ -26,9 +26,6 @@
             </a>
 
             <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-                <button id="adminChangePassBtn" onclick="openChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem;">
-                    🔑 Cambiar Contraseña
-                </button>
                 <button id="adminLogoutBtn" onclick="handleAdminLogout()" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem; display: none; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">
                     🔒 Cerrar Sesión
                 </button>
@@ -82,23 +79,20 @@
                 </div>
                 
                 <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
-                    <button onclick="openChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem;">
-                        🔑 Cambiar Contraseña
-                    </button>
                     <button onclick="handleExportProjectsConfig()" class="btn btn-primary" style="font-size: 0.85rem;">
                         📋 Exportar portfolio-data.js
                     </button>
                 </div>
             </div>
 
-            <!-- SECCIÓN 0: SEGURIDAD & CAMBIO DE CONTRASEÑA -->
+            <!-- 🔐 SECCIÓN ÚNICA DE CAMBIO DE CONTRASEÑA -->
             <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
                 <h4 style="color: var(--accent-purple); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
                     <span>🔐 Seguridad & Contraseña Maestra</span>
                     <span style="font-size: 0.8rem; background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 0.2rem 0.6rem; border-radius: 4px;">🟢 Sesión Activa</span>
                 </h4>
                 <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
-                    Puedes actualizar tu contraseña de acceso en cualquier momento. Se cifrará de forma segura con <strong>SHA-256</strong>.
+                    Actualiza tu clave de acceso al panel admin. Se cifrará de forma segura con <strong>SHA-256</strong>.
                 </p>
 
                 <form onsubmit="handleSaveInlinePasswordChange(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
@@ -243,48 +237,6 @@
 
         </div>
     </main>
-
-    <!-- 🔑 MODAL PARA CAMBIAR CONTRASEÑA -->
-    <div class="demo-overlay" id="changePasswordModal">
-        <div class="demo-modal-container" style="max-width: 480px; height: auto; max-height: 90vh; overflow-y: auto;">
-            <div class="demo-modal-header">
-                <div class="demo-modal-title">
-                    <span style="font-size: 1.3rem;">🔑</span>
-                    <div>
-                        <h3>Cambiar Contraseña Maestra</h3>
-                        <div style="font-size: 0.78rem; color: var(--text-secondary);">Actualiza la clave de acceso al panel admin</div>
-                    </div>
-                </div>
-                <button class="demo-close-btn" onclick="closeChangePasswordModal()" title="Cerrar">✕</button>
-            </div>
-
-            <div class="demo-modal-body" style="padding: 1.5rem;">
-                <form id="changePasswordForm" onsubmit="handleSaveNewPasswordForm(event)" style="display: flex; flex-direction: column; gap: 1.1rem;">
-                    <div>
-                        <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Contraseña Actual *</label>
-                        <input type="password" id="currentAdminPassword" required placeholder="Introduce tu contraseña actual..." style="width: 100%; padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
-                    </div>
-
-                    <div>
-                        <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Nueva Contraseña * (Mínimo 6 caracteres)</label>
-                        <input type="password" id="newAdminPassword" required minlength="6" placeholder="Introduce la nueva contraseña..." style="width: 100%; padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
-                    </div>
-
-                    <div>
-                        <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Confirmar Nueva Contraseña *</label>
-                        <input type="password" id="confirmAdminPassword" required minlength="6" placeholder="Repite la nueva contraseña..." style="width: 100%; padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
-                    </div>
-
-                    <div id="changePasswordAlert" style="font-size: 0.85rem; display: none;"></div>
-
-                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 0.5rem;">
-                        <button type="button" onclick="closeChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem;">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" style="font-size: 0.85rem;">💾 Actualizar Contraseña</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <!-- Scripts -->
     <script src="js/github-service.js"></script>

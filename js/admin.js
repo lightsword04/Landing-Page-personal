@@ -40,13 +40,11 @@ function checkAdminSession() {
     const loginSection = document.getElementById('adminLoginSection');
     const mainDashboard = document.getElementById('adminMainDashboard');
     const logoutBtn = document.getElementById('adminLogoutBtn');
-    const changePassBtn = document.getElementById('adminChangePassBtn');
 
     if (isSessionAuthenticated()) {
         if (loginSection) loginSection.style.display = 'none';
         if (mainDashboard) mainDashboard.style.display = 'flex';
         if (logoutBtn) logoutBtn.style.display = 'inline-flex';
-        if (changePassBtn) changePassBtn.style.display = 'inline-flex';
 
         updatePATStatusUI();
         renderAdminProjectsList();
@@ -54,7 +52,6 @@ function checkAdminSession() {
         if (loginSection) loginSection.style.display = 'block';
         if (mainDashboard) mainDashboard.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'none';
-        if (changePassBtn) changePassBtn.style.display = 'none';
     }
 }
 
@@ -89,7 +86,7 @@ function handleAdminLogout() {
     window.location.reload();
 }
 
-// Inline Password Change Handler
+// Single Unified Password Change Handler
 async function handleSaveInlinePasswordChange(event) {
     event.preventDefault();
 
@@ -135,71 +132,6 @@ async function handleSaveInlinePasswordChange(event) {
     document.getElementById('inlineCurrentPass').value = '';
     document.getElementById('inlineNewPass').value = '';
     document.getElementById('inlineConfirmPass').value = '';
-}
-
-// Modal Password Management
-function openChangePasswordModal() {
-    const modal = document.getElementById('changePasswordModal');
-    if (!modal) return;
-    document.getElementById('changePasswordForm').reset();
-    const alertEl = document.getElementById('changePasswordAlert');
-    if (alertEl) alertEl.style.display = 'none';
-
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeChangePasswordModal() {
-    const modal = document.getElementById('changePasswordModal');
-    if (!modal) return;
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-async function handleSaveNewPasswordForm(event) {
-    event.preventDefault();
-
-    const currentPass = document.getElementById('currentAdminPassword').value.trim();
-    const newPass = document.getElementById('newAdminPassword').value.trim();
-    const confirmPass = document.getElementById('confirmAdminPassword').value.trim();
-    const alertEl = document.getElementById('changePasswordAlert');
-
-    const showAlert = (msg, isSuccess = false) => {
-        if (!alertEl) return;
-        alertEl.style.display = 'block';
-        alertEl.style.color = isSuccess ? '#4ade80' : '#fca5a5';
-        alertEl.textContent = msg;
-    };
-
-    if (!currentPass || !newPass || !confirmPass) {
-        showAlert('❌ Todos los campos son obligatorios.');
-        return;
-    }
-
-    const currentHash = await hashPassword(currentPass);
-    if (currentHash !== getStoredPasswordHash()) {
-        showAlert('❌ La contraseña actual es incorrecta.');
-        return;
-    }
-
-    if (newPass.length < 6) {
-        showAlert('❌ La nueva contraseña debe tener al menos 6 caracteres.');
-        return;
-    }
-
-    if (newPass !== confirmPass) {
-        showAlert('❌ La nueva contraseña y su confirmación no coinciden.');
-        return;
-    }
-
-    const newHash = await hashPassword(newPass);
-    localStorage.setItem('admin_password_hash', newHash);
-
-    showAlert('✅ ¡Contraseña cambiada exitosamente!', true);
-    setTimeout(() => {
-        closeChangePasswordModal();
-        alert('🔒 Tu contraseña ha sido actualizada. Utiliza tu nueva contraseña en tu próximo inicio de sesión.');
-    }, 1200);
 }
 
 // ==========================================
