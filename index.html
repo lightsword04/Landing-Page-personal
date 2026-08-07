@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yordan Alberto Rojas de La Cruz | Ingeniero de Sistemas & Full Stack Multiplataforma</title>
+    <meta name="description" content="Portafolio profesional de Yordan Alberto Rojas de La Cruz, Ingeniero de Sistemas especializado en desarrollo Web, Multiplataforma (Flutter PC & Mobile), Java/Spring Boot y React.">
+    <meta name="keywords" content="Yordan Rojas, Ingeniero de Sistemas, Desarrollador Full Stack, Flutter Desktop, Flutter Mobile, Java, PostgreSQL, React, Perú">
+    <meta name="author" content="Yordan Alberto Rojas de La Cruz">
+
+    <!-- Open Graph SEO -->
+    <meta property="og:title" content="Yordan Alberto Rojas de La Cruz | Portafolio Profesional">
+    <meta property="og:description" content="Explora mis proyectos de desarrollo de software multiplataforma (Mobile & Desktop/PC) y sistemas web.">
+    <meta property="og:type" content="website">
+
+    <!-- Stylesheets & Fonts -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- Ambient Glowing Background Orbs -->
+    <div class="ambient-glow">
+        <div class="glow-orb glow-orb-1"></div>
+        <div class="glow-orb glow-orb-2"></div>
+        <div class="glow-orb glow-orb-3"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#hero" class="logo">
+                <div class="logo-badge">YR</div>
+                <span>Yordan<span class="gradient-text">.dev</span></span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="#hero" class="nav-link active">Inicio</a></li>
+                <li><a href="#about" class="nav-link">Sobre Mí</a></li>
+                <li><a href="#experience" class="nav-link">Experiencia</a></li>
+                <li><a href="#skills" class="nav-link">Habilidades</a></li>
+                <li><a href="#projects" class="nav-link">Proyectos</a></li>
+                <li><a href="#education" class="nav-link">Educación</a></li>
+                <li><a href="#contact" class="nav-link">Contacto</a></li>
+            </ul>
+
+            <a href="#contact" class="nav-cta">
+                ✉️ Contacto
+            </a>
+
+            <button class="nav-toggle" aria-label="Abrir Menú">☰</button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    <span>Disponible para Oportunidades en Ingeniería de Software</span>
+                </div>
+
+                <h1 class="hero-title">
+                    Hola, soy <br>
+                    <span class="gradient-text" id="heroName">Yordan Alberto Rojas</span>
+                </h1>
+
+                <h2 class="hero-subtitle" id="heroTitle">
+                    Ingeniero de Sistemas | Full Stack & Multiplataforma (Mobile & Desktop)
+                </h2>
+
+                <p id="heroAbout" style="color: var(--text-secondary); font-size: 1.05rem;">
+                    Especializado en desarrollo Web, aplicaciones multiplataforma (Flutter PC & Móvil) y transformación digital.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">
+                        💼 Ver Proyectos
+                    </a>
+                    <a href="#contact" class="btn btn-secondary">
+                        ✉️ Contactar Conmigo
+                    </a>
+                </div>
+
+                <div class="hero-stats" id="heroStats">
+                    <!-- Stats se renderizan dinámicamente con JS -->
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="profile-card-glass">
+                    <div class="avatar-wrapper">
+                        <div class="avatar-img-placeholder">YR</div>
+                        <div class="avatar-badge" title="Verificado">✓</div>
+                    </div>
+                    <h3>Yordan A. Rojas de La Cruz</h3>
+                    <p>Ingeniero de Sistemas</p>
+                    
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; text-align: left;">
+                        📍 Lima, Perú<br>
+                        🎓 Bachiller & Título Profesional UTP<br>
+                        💼 Exp. en Desarrollo de Software & TI
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/yordan-rojas-de-la-cruz-15241015b" target="_blank" class="social-btn" title="LinkedIn">
+                            in
+                        </a>
+                        <a href="mailto:yordandevmulti@gmail.com" class="social-btn" title="Enviar Email">
+                            ✉
+                        </a>
+                        <a href="tel:+51971957627" class="social-btn" title="Llamar">
+                            📞
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE MÍ SECTION -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Perfil Profesional</span>
+                <h2 class="section-title">Ingeniero de Sistemas <span class="gradient-text">Full Stack</span></h2>
+                <p class="section-subtitle">
+                    Dominio de ecosistemas Web, Mobile y Desktop PC con visión de arquitectura limpia y desarrollo eficiente.
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div class="skill-card">
+                    <div class="skill-card-header">
+                        <div class="skill-icon-box">🌐</div>
+                        <h3>Desarrollo Web & Backend</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Arquitecturas sólidas con Spring Boot, Laravel y React. Creación de APIs RESTful eficientes y seguras integradas a bases de datos relacionales y no relacionales.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-card-header">
+                        <div class="skill-icon-box">📱</div>
+                        <h3>Multiplataforma (Mobile & Desktop PC)</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Desarrollo multiplataforma en Flutter para PC (Windows) y dispositivos móviles (Android/iOS). Interfaces UX fluidas, gestión de estado y rendimiento nativo.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <div class="skill-card-header">
+                        <div class="skill-icon-box">🤖</div>
+                        <h3>Herramientas & Productividad IA</h3>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                        Uso activo e integración de herramientas de Inteligencia Artificial (Copilot, Claude, Gemini) para optimización de tiempos, refactorización y pruebas de software.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCIA LABORAL (TIMELINE) -->
+    <section id="experience">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Historial Profesional</span>
+                <h2 class="section-title">Experiencia <span class="gradient-text">Laboral</span></h2>
+                <p class="section-subtitle">
+                    Trayectoria y proyectos profesionales en la industria del desarrollo de software e ingeniería de sistemas.
+                </p>
+            </div>
+
+            <div class="timeline" id="experienceTimeline">
+                <!-- Se renderiza dinámicamente desde js/portfolio-data.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- HABILIDADES TÉCNICAS -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Stack Tecnológico</span>
+                <h2 class="section-title">Habilidades & <span class="gradient-text">Herramientas</span></h2>
+                <p class="section-subtitle">
+                    Tecnologías utilizadas en el diseño y desarrollo de sistemas de software.
+                </p>
+            </div>
+
+            <div class="skills-grid" id="skillsGrid">
+                <!-- Se renderizan dinámicamente con JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- PROYECTOS SECTION -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Proyectos</span>
+                <h2 class="section-title">Mis <span class="gradient-text">Proyectos</span></h2>
+                <p class="section-subtitle">
+                    Explora mis proyectos de experiencia laboral en la industria y proyectos de práctica personal.
+                </p>
+            </div>
+
+            <div id="projectsContainer">
+                <!-- Se renderizan dinámicamente proyectos Laborales y Personales por categoría con JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- EDUCACIÓN SECTION -->
+    <section id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Formación Académica</span>
+                <h2 class="section-title">Educación & <span class="gradient-text">Grados</span></h2>
+            </div>
+
+            <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+                <div class="skill-card" style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                    <div class="skill-icon-box" style="font-size: 2rem; width: 60px; height: 60px;">🎓</div>
+                    <div style="flex: 1;">
+                        <h3 style="font-size: 1.3rem; margin-bottom: 0.3rem;">Universidad Tecnológica del Perú</h3>
+                        <div style="color: var(--accent-cyan); font-weight: 600; margin-bottom: 0.5rem;">Ingeniería de Sistemas</div>
+                        <ul style="color: var(--text-secondary); font-size: 0.95rem; list-style-position: inside;">
+                            <li><strong>Título Profesional de Ingeniero de Sistemas:</strong> Obtenido el 21 de abril de 2026.</li>
+                            <li><strong>Grado de Bachiller:</strong> Obtenido el 1 de setiembre de 2025.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="skill-card">
+                    <h3 style="font-size: 1.2rem; margin-bottom: 1rem;">💡 Competencias & Flujo de Trabajo</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+                        <div>
+                            <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;">🤖 Inteligencia Artificial</h4>
+                            <p style="font-size: 0.88rem; color: var(--text-secondary);">Uso productivo de Copilot, Claude y Gemini para optimizar tiempos de desarrollo, refactorizar código y automatizar pruebas.</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--accent-purple); margin-bottom: 0.4rem;">⚡ Trabajo en Equipo & Análisis</h4>
+                            <p style="font-size: 0.88rem; color: var(--text-secondary);">Análisis de escenarios complejos, diseño modular de código y resolución ágil de problemas en momentos críticos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO SECTION -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-card-glass">
+                <span class="section-tag">¿Hablamos?</span>
+                <h2 class="section-title" style="margin-top: 0.5rem;">Ponte en <span class="gradient-text">Contacto</span></h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 1rem auto 0;">
+                    Estoy interesado en oportunidades profesionales como Desarrollador Full Stack, Desarrollador Multiplataforma (Flutter Mobile & Desktop/PC) o Ingeniero de Software.
+                </p>
+
+                <div class="contact-links-grid">
+                    <a href="mailto:yordandevmulti@gmail.com" class="contact-item-btn">
+                        <div class="contact-icon-wrapper">✉️</div>
+                        <div style="text-align: left; min-width: 0;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Correo Electrónico</div>
+                            <div style="font-size: 0.9rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">yordandevmulti@gmail.com</div>
+                        </div>
+                    </a>
+
+                    <a href="tel:+51971957627" class="contact-item-btn">
+                        <div class="contact-icon-wrapper">📞</div>
+                        <div style="text-align: left; min-width: 0;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Teléfono / WhatsApp</div>
+                            <div style="font-size: 0.95rem; font-weight: 600;">+51 971 957 627</div>
+                        </div>
+                    </a>
+
+                    <a href="https://www.linkedin.com/in/yordan-rojas-de-la-cruz-15241015b" target="_blank" class="contact-item-btn">
+                        <div class="contact-icon-wrapper">💼</div>
+                        <div style="text-align: left; min-width: 0;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Perfil Profesional</div>
+                            <div style="font-size: 0.95rem; font-weight: 600;">LinkedIn</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Yordan Alberto Rojas de La Cruz. Todos los derechos reservados.</p>
+            <p style="font-size: 0.8rem; margin-top: 0.4rem; color: var(--text-muted);">
+                Desarrollado con HTML5, CSS3 Glassmorphism y JavaScript. Portafolio listo para actualización de datos.
+            </p>
+        </div>
+    </footer>
+
+
+    <!-- MODAL DE DETALLE TÉCNICO & ARQUITECTURA DEL PROYECTO LABORAL -->
+    <div class="demo-overlay" id="projectDetailOverlay">
+        <div class="demo-modal-container" style="max-width: 1150px;">
+            <div class="demo-modal-header">
+                <div class="demo-modal-title">
+                    <span style="font-size: 1.5rem;">🛞</span>
+                    <div>
+                        <h3>Multillantas Macollins — Sistema de Inventario y Ventas</h3>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Backend Java 17 / Spring Boot 3.4.2 & Cliente Multiplataforma Flutter (PC & Mobile)</div>
+                    </div>
+                </div>
+                <button class="demo-close-btn" onclick="closeProjectDetailModal()" title="Cerrar Detalle">✕</button>
+            </div>
+
+            <div class="demo-modal-body" style="gap: 2rem;">
+                <!-- Imagen Principal del Dashboard del Sistema -->
+                <div style="border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color-glow); height: 380px; background: rgba(10, 15, 26, 0.95); display: flex; align-items: center; justify-content: center; padding: 0.5rem;">
+                    <img src="img/llantas-dashboard.png" alt="Catálogo de Productos y Dashboard Multillantas Macollins" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: var(--radius-sm);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                    <!-- Columna Backend -->
+                    <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-md);">
+                        <h4 style="color: var(--accent-cyan); font-size: 1.15rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            ⚙️ Backend REST API (Java 17 & Spring Boot 3.4.2)
+                        </h4>
+                        <ul style="color: var(--text-secondary); font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.6rem; list-style-position: inside;">
+                            <li><strong>Arquitectura en Capas:</strong> Controller, Service (@Transactional), Repository (JpaRepository), Models JPA y DTOs seguros.</li>
+                            <li><strong>Seguridad & RBAC:</strong> JWT Access/Refresh Tokens, BCrypt, StrictHttpFirewall y matriz de roles (DUEÑO, ADMIN, ALMACENERO, VENDEDOR).</li>
+                            <li><strong>Caché & Performance:</strong> Caffeine Cache en memoria para catálogos de alto tráfico.</li>
+                            <li><strong>Servicios Integrados:</strong> Impresión de reportes PDF en tiempo real (OpenPDF), generación de QR (ZXing) y notificaciones Firebase Admin SDK.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Columna Frontend -->
+                    <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-md);">
+                        <h4 style="color: var(--accent-purple); font-size: 1.15rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                            📱 Cliente Multiplataforma (Flutter PC Desktop & Android)
+                        </h4>
+                        <ul style="color: var(--text-secondary); font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.6rem; list-style-position: inside;">
+                            <li><strong>Gestión Offline Sync:</strong> OfflineHttpClient & SyncService para registrar transacciones sin conexión y sincronizar en segundo plano.</li>
+                            <li><strong>Seguridad en Cliente:</strong> Encriptación AES-256 con FlutterSecureStorage para tokens JWT.</li>
+                            <li><strong>Auto Logout:</strong> SessionTimeoutWrapper para cierre automático por inactividad.</li>
+                            <li><strong>Soporte Desktop PC:</strong> WindowManager configurado para pantalla inicial estandarizada de 1280x720 en Windows PC.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/portfolio-data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
