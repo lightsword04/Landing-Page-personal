@@ -9,6 +9,7 @@ function initApp() {
     renderSkills();
     renderProjects();
     setupProjectModal();
+    setupAdminModal();
 }
 
 if (document.readyState === 'loading') {
@@ -289,6 +290,32 @@ function closeProjectModal() {
 // ==========================================
 // ADMIN PANEL & CRUD CONTROLLER
 // ==========================================
+
+function setupAdminModal() {
+    const overlay = document.getElementById('adminProjectsModal');
+    if (!overlay) return;
+
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            closeAdminModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+            closeAdminModal();
+        }
+        // Shortcut: Ctrl + Shift + A (or Cmd + Shift + A) to toggle Admin Panel
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+            e.preventDefault();
+            if (overlay.classList.contains('active')) {
+                closeAdminModal();
+            } else {
+                openAdminModal();
+            }
+        }
+    });
+}
 
 function openAdminModal() {
     const overlay = document.getElementById('adminProjectsModal');
