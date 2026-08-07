@@ -141,6 +141,7 @@ async function handleSaveInlinePasswordChange(event) {
 async function updatePATStatusUI() {
     const badge = document.getElementById('patStatusBadge');
     const alertBox = document.getElementById('patStatusAlert');
+    const warningBanner = document.getElementById('patWarningBanner');
     const patInput = document.getElementById('githubPatInput');
 
     if (patInput && typeof GitHubService !== 'undefined') {
@@ -155,12 +156,15 @@ async function updatePATStatusUI() {
     if (result.status === 'VALID') {
         badge.classList.add('pat-valid');
         badge.textContent = `🟢 Token VÁLIDO (${result.user ? result.user.login : 'GitHub'})`;
+        if (warningBanner) warningBanner.style.display = 'none';
     } else if (result.status === 'INVALID') {
         badge.classList.add('pat-invalid');
         badge.textContent = '🔴 Token EXPIRADO / INVÁLIDO';
+        if (warningBanner) warningBanner.style.display = 'flex';
     } else {
         badge.classList.add('pat-neutral');
         badge.textContent = '⚪ Sin Token PAT (Acceso Público)';
+        if (warningBanner) warningBanner.style.display = 'none';
     }
 
     if (alertBox) {
@@ -168,6 +172,8 @@ async function updatePATStatusUI() {
         alertBox.textContent = result.message;
         alertBox.style.color = result.status === 'VALID' ? '#4ade80' : (result.status === 'INVALID' ? '#fca5a5' : '#94a3b8');
     }
+
+    return result;
 }
 
 async function handleSavePAT() {
@@ -176,7 +182,13 @@ async function handleSavePAT() {
 
     const token = patInput.value.trim();
     GitHubService.savePAT(token);
-    await updatePATStatusUI();
+    const result = await updatePATStatusUI();
+
+    if (result && result.status === 'VALID') {
+        alert(`✅ ¡Token PAT Guardado con Éxito! Se ha almacenado permanentemente en tu navegador. Tus repositorios públicos y privados (${result.user ? result.user.login : 'GitHub'}) están listos para sincronizar.`);
+    } else if (result && result.status === 'INVALID') {
+        alert('🚨 ADVERTENCIA DE SEGURIDAD: El Token PAT ingresado ha expirado o no tiene permisos válidos. Genera un nuevo Token Classic en GitHub.');
+    }
 }
 
 async function handleRemovePAT() {
@@ -200,7 +212,13 @@ async function handleFetchGitHubRepos() {
     const repos = await GitHubService.fetchUserRepos('lightsword04');
 
     if (!repos || repos.length === 0) {
-        reposListEl.innerHTML = '<div style="color: #fca5a5; font-size: 0.85rem; text-align: center; padding: 1rem;">No se encontraron repositorios o se excedió el límite de API sin Token.</div>';
+        const patStatus = await GitHubService.verifyPAT();
+        if (patStatus.status === 'INVALID') {
+            reposListEl.innerHTML = '<div style="color: #fca5a5; font-size: 0.88rem; text-align: center; padding: 1.25rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm);">🚨 <strong>Error 401: Tu Token PAT de GitHub ha expirado o no es válido.</strong><br><span style="font-size: 0.8rem; color: #cbd5e1; display: inline-block; margin-top: 0.3rem;">Guarda un nuevo Token Classic o Fine-Grained vigente para poder cargar repositorios privados.</span></div>';
+            alert('🚨 Tu Token PAT de GitHub ha expirado o ya no es válido. Por favor actualízalo para cargar repositorios privados.');
+        } else {
+            reposListEl.innerHTML = '<div style="color: #fca5a5; font-size: 0.85rem; text-align: center; padding: 1rem;">No se encontraron repositorios o se excedió el límite de API de GitHub.</div>';
+        }
         return;
     }
 

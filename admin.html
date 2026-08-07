@@ -77,8 +77,15 @@
                         Gestiona tus repositorios de GitHub, añade nuevos proyectos y actualiza la configuración de tu portafolio.
                     </p>
                 </div>
-                
+            </div>
 
+            <!-- 🚨 BANNER DE ADVERTENCIA PARA TOKEN INVALIDADOS / EXPIRADOS -->
+            <div id="patWarningBanner" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-md); padding: 1rem 1.25rem; color: #fca5a5; font-size: 0.88rem; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 1.4rem;">🚨</span>
+                <div>
+                    <strong>¡Atención! Tu Token PAT de GitHub ha expirado o ya no es válido.</strong>
+                    <div style="font-size: 0.82rem; margin-top: 0.2rem; color: #cbd5e1;">Tus repositorios privados de GitHub no se podrán cargar ni sincronizar hasta que actualices tu Token PAT a continuación.</div>
+                </div>
             </div>
 
             <!-- 🔐 SECCIÓN ÚNICA DE CAMBIO DE CONTRASEÑA -->
@@ -125,7 +132,7 @@
                 </p>
 
                 <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                    <input type="password" id="githubPatInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx (GitHub PAT Token)" style="flex: 1; min-width: 260px; padding: 0.65rem 1rem; border-radius: var(--radius-md); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
+                    <input type="password" id="githubPatInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx (GitHub PAT Token Classic)" style="flex: 1; min-width: 260px; padding: 0.65rem 1rem; border-radius: var(--radius-md); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
                     <button onclick="handleSavePAT()" class="btn btn-primary" style="font-size: 0.85rem;">💾 Guardar & Probar Token</button>
                     <button onclick="handleRemovePAT()" class="btn btn-secondary" style="font-size: 0.85rem; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">🗑️ Borrar Token</button>
                 </div>
@@ -216,9 +223,9 @@
             <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
                     <h4 style="color: var(--accent-cyan); font-size: 1.1rem;">📋 Proyectos Registrados</h4>
-                        <button onclick="handleResetProjectsData()" class="btn btn-secondary" style="font-size: 0.85rem; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;" title="Restablecer proyectos iniciales">
-                            ↺ Restablecer Iniciales
-                        </button>
+                    <button onclick="handleResetProjectsData()" class="btn btn-secondary" style="font-size: 0.85rem; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;" title="Restablecer proyectos iniciales">
+                        ↺ Restablecer Iniciales
+                    </button>
                 </div>
 
                 <div id="adminProjectsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
