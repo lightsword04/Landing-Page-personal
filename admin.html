@@ -91,6 +91,38 @@
                 </div>
             </div>
 
+            <!-- SECCIÓN 0: SEGURIDAD & CAMBIO DE CONTRASEÑA -->
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
+                <h4 style="color: var(--accent-purple); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <span>🔐 Seguridad & Contraseña Maestra</span>
+                    <span style="font-size: 0.8rem; background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 0.2rem 0.6rem; border-radius: 4px;">🟢 Sesión Activa</span>
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                    Puedes actualizar tu contraseña de acceso en cualquier momento. Se cifrará de forma segura con <strong>SHA-256</strong>.
+                </p>
+
+                <form onsubmit="handleSaveInlinePasswordChange(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Contraseña Actual *</label>
+                        <input type="password" id="inlineCurrentPass" required placeholder="Tu contraseña actual..." style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Nueva Contraseña *</label>
+                        <input type="password" id="inlineNewPass" required minlength="6" placeholder="Mínimo 6 caracteres..." style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Confirmar Nueva Contraseña *</label>
+                        <input type="password" id="inlineConfirmPass" required minlength="6" placeholder="Repite la nueva clave..." style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 0.85rem; padding: 0.6rem 1rem;">
+                            💾 Actualizar Contraseña
+                        </button>
+                    </div>
+                </form>
+                <div id="inlinePassStatusAlert" style="margin-top: 0.75rem; font-size: 0.85rem; display: none;"></div>
+            </div>
+
             <!-- SECCIÓN 1: ESTADO DEL TOKEN PAT DE GITHUB -->
             <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
                 <h4 style="color: var(--accent-cyan); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">

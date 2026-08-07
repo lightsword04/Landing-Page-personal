@@ -89,6 +89,54 @@ function handleAdminLogout() {
     window.location.reload();
 }
 
+// Inline Password Change Handler
+async function handleSaveInlinePasswordChange(event) {
+    event.preventDefault();
+
+    const currentPass = document.getElementById('inlineCurrentPass').value.trim();
+    const newPass = document.getElementById('inlineNewPass').value.trim();
+    const confirmPass = document.getElementById('inlineConfirmPass').value.trim();
+    const alertEl = document.getElementById('inlinePassStatusAlert');
+
+    const showAlert = (msg, isSuccess = false) => {
+        if (!alertEl) return;
+        alertEl.style.display = 'block';
+        alertEl.style.color = isSuccess ? '#4ade80' : '#fca5a5';
+        alertEl.textContent = msg;
+    };
+
+    if (!currentPass || !newPass || !confirmPass) {
+        showAlert('❌ Todos los campos son obligatorios.');
+        return;
+    }
+
+    const currentHash = await hashPassword(currentPass);
+    if (currentHash !== getStoredPasswordHash()) {
+        showAlert('❌ La contraseña actual es incorrecta.');
+        return;
+    }
+
+    if (newPass.length < 6) {
+        showAlert('❌ La nueva contraseña debe tener al menos 6 caracteres.');
+        return;
+    }
+
+    if (newPass !== confirmPass) {
+        showAlert('❌ La nueva contraseña y su confirmación no coinciden.');
+        return;
+    }
+
+    const newHash = await hashPassword(newPass);
+    localStorage.setItem('admin_password_hash', newHash);
+
+    showAlert('✅ ¡Contraseña de administración actualizada con éxito!', true);
+    
+    // Clear inputs
+    document.getElementById('inlineCurrentPass').value = '';
+    document.getElementById('inlineNewPass').value = '';
+    document.getElementById('inlineConfirmPass').value = '';
+}
+
 // Modal Password Management
 function openChangePasswordModal() {
     const modal = document.getElementById('changePasswordModal');
