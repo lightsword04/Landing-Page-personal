@@ -398,21 +398,54 @@ async function handleFetchGitHubRepos() {
         return;
     }
 
-    reposListEl.innerHTML = repos.map(repo => `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.9rem; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-sm); font-size: 0.85rem;">
-            <div>
-                <strong style="color: #fff;">${repo.name}</strong>
-                ${repo.private ? '<span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.72rem; margin-left: 0.4rem;">🔒 Privado</span>' : '<span style="background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.72rem; margin-left: 0.4rem;">🌐 Público</span>'}
-                <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem;">${repo.description || 'Sin descripción en GitHub'}</div>
+    // Get current projects on landing page to prevent duplicate imports
+    const data = typeof getStoredPortfolioData === 'function' ? getStoredPortfolioData() : PORTFOLIO_DATA;
+    const existingProjects = [];
+    if (data && Array.isArray(data.projectCategories)) {
+        data.projectCategories.forEach(cat => {
+            (cat.projects || []).forEach(p => existingProjects.push(p));
+        });
+    }
+
+    const isRepoAdded = (repo) => {
+        const repoUrlLower = repo.html_url.toLowerCase();
+        const repoNameLower = repo.name.toLowerCase();
+        return existingProjects.some(p => {
+            if (p.githubUrl && p.githubUrl.toLowerCase() === repoUrlLower) return true;
+            if (p.githubUrl && p.githubUrl.toLowerCase().endsWith('/' + repoNameLower)) return true;
+            if (p.id && (p.id.toLowerCase() === 'repo-' + repoNameLower || p.id.toLowerCase() === repoNameLower)) return true;
+            return false;
+        });
+    };
+
+    reposListEl.innerHTML = repos.map(repo => {
+        const alreadyAdded = isRepoAdded(repo);
+
+        return `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0.9rem; background: ${alreadyAdded ? 'rgba(6, 182, 212, 0.05)' : 'rgba(255, 255, 255, 0.03)'}; border: 1px solid ${alreadyAdded ? 'rgba(6, 182, 212, 0.2)' : 'rgba(255, 255, 255, 0.08)'}; border-radius: var(--radius-sm); font-size: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                    <strong style="color: #fff;">${repo.name}</strong>
+                    ${repo.private ? '<span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.72rem; margin-left: 0.4rem;">🔒 Privado</span>' : '<span style="background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.72rem; margin-left: 0.4rem;">🌐 Público</span>'}
+                    <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem;">${repo.description || 'Sin descripción en GitHub'}</div>
+                </div>
+
+                <div>
+                    ${alreadyAdded ? `
+                        <span style="background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); padding: 0.35rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            ✓ Ya en la Landing
+                        </span>
+                    ` : `
+                        <button onclick="importGitHubRepo('${repo.owner.login}', '${repo.name}', '${encodeURIComponent(repo.html_url)}', '${encodeURIComponent(repo.description || '')}', '${repo.language || ''}')" class="btn btn-primary" style="font-size: 0.78rem; padding: 0.35rem 0.75rem;">
+                            + Importar
+                        </button>
+                    `}
+                </div>
             </div>
-            <button onclick="importGitHubRepo('${repo.owner.login}', '${repo.name}', '${encodeURIComponent(repo.html_url)}', '${encodeURIComponent(repo.description || '')}')" class="btn btn-primary" style="font-size: 0.78rem; padding: 0.35rem 0.75rem;">
-                + Importar
-            </button>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
-async function importGitHubRepo(owner, repoName, encodedUrl, encodedDesc) {
+async function importGitHubRepo(owner, repoName, encodedUrl, encodedDesc, mainLanguage) {
     const url = decodeURIComponent(encodedUrl);
     const desc = decodeURIComponent(encodedDesc);
 
@@ -421,12 +454,14 @@ async function importGitHubRepo(owner, repoName, encodedUrl, encodedDesc) {
         readme = await GitHubService.fetchRepoReadme(owner, repoName);
     }
 
+    const techList = mainLanguage ? [mainLanguage, 'GitHub'] : ['GitHub', 'Code'];
+
     // Populate form
     document.getElementById('formProjectId').value = 'repo-' + repoName.toLowerCase();
     document.getElementById('formProjectTitle').value = repoName;
     document.getElementById('formProjectCategory').value = 'personales';
-    document.getElementById('formProjectBadge').value = 'REPOSISTORIO GITHUB';
-    document.getElementById('formProjectTech').value = 'GitHub, Code';
+    document.getElementById('formProjectBadge').value = mainLanguage ? `PROYECTO EN ${mainLanguage.toUpperCase()}` : 'REPOSITORIO GITHUB';
+    document.getElementById('formProjectTech').value = techList.join(', ');
     document.getElementById('formProjectGithubUrl').value = url;
     document.getElementById('formProjectDesc').value = desc || `Repositorio ${repoName} importado directamente de GitHub.`;
     document.getElementById('formProjectReadme').value = readme || `# ${repoName}\n\nRepositorio oficial importado desde GitHub: [${url}](${url})`;
@@ -528,6 +563,61 @@ function handleSaveProjectForm(event) {
     cancelProjectEdit();
     renderAdminProjectsList();
     renderProjects();
+    const reposListEl = document.getElementById('githubReposList');
+    if (reposListEl && reposListEl.children.length > 1) {
+        handleFetchGitHubRepos();
+    }
+}
+
+async function handleImageFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const statusEl = document.getElementById('formImageUploadStatus');
+    const previewContainer = document.getElementById('formImagePreviewContainer');
+    const previewImg = document.getElementById('formImagePreview');
+    const imageInput = document.getElementById('formProjectImage');
+
+    if (!file.type.startsWith('image/')) {
+        alert('Por favor selecciona un archivo de imagen válido (.png, .jpg, .webp).');
+        return;
+    }
+
+    // Instant local preview using Base64 Data URL
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        if (previewImg && previewContainer) {
+            previewImg.src = e.target.result;
+            previewContainer.style.display = 'block';
+        }
+        // Set fallback base64 if input is empty
+        if (imageInput && !imageInput.value) {
+            imageInput.value = e.target.result;
+        }
+    };
+    reader.readAsDataURL(file);
+
+    // Upload to GitHub repository if PAT is available
+    if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.style.color = 'var(--accent-cyan)';
+        statusEl.textContent = '⏳ Procesando y subiendo imagen a tu repositorio en GitHub...';
+    }
+
+    if (typeof GitHubService !== 'undefined') {
+        const uploadRes = await GitHubService.uploadImageToRepo(file);
+
+        if (statusEl) {
+            statusEl.style.color = uploadRes.success ? '#4ade80' : '#94a3b8';
+            statusEl.textContent = uploadRes.message;
+        }
+
+        if (uploadRes.success && uploadRes.path) {
+            if (imageInput) {
+                imageInput.value = uploadRes.path;
+            }
+        }
+    }
 }
 
 function editProject(projectId) {
@@ -555,6 +645,16 @@ function editProject(projectId) {
     document.getElementById('formProjectImage').value = target.imageCard || '';
     document.getElementById('formProjectDesc').value = target.description || '';
     document.getElementById('formProjectReadme').value = target.readmeMarkdown || '';
+
+    // Load preview if image exists
+    const previewContainer = document.getElementById('formImagePreviewContainer');
+    const previewImg = document.getElementById('formImagePreview');
+    if (target.imageCard && previewContainer && previewImg) {
+        previewImg.src = target.imageCard;
+        previewContainer.style.display = 'block';
+    } else if (previewContainer) {
+        previewContainer.style.display = 'none';
+    }
 
     document.getElementById('crudFormTitle').textContent = `✏️ Editando: ${target.title}`;
     document.getElementById('crudProjectForm').scrollIntoView({ behavior: 'smooth' });
@@ -598,6 +698,11 @@ function cancelProjectEdit() {
     document.getElementById('crudProjectForm').reset();
     document.getElementById('formProjectId').value = '';
     document.getElementById('crudFormTitle').textContent = '➕ Crear Nuevo Proyecto Personalizado';
+    
+    const previewContainer = document.getElementById('formImagePreviewContainer');
+    const statusEl = document.getElementById('formImageUploadStatus');
+    if (previewContainer) previewContainer.style.display = 'none';
+    if (statusEl) statusEl.style.display = 'none';
 }
 
 function handleResetProjectsData() {

@@ -146,6 +146,74 @@ const GitHubService = {
         if (filesLower.includes('dockerfile') || filesLower.includes('docker-compose.yml')) tech.add('Docker');
 
         return Array.from(tech);
+    },
+
+    // Upload image file directly to GitHub repo's img/ folder
+    async uploadImageToRepo(file, owner = 'lightsword04', repoName = 'Landing-Page-personal') {
+        const token = this.getPAT();
+        if (!token) {
+            return {
+                success: false,
+                message: '⚪ Sin Token PAT. La imagen se guardará localmente (Base64), pero ingresa un PAT en el Admin para subirla a GitHub.',
+                path: ''
+            };
+        }
+
+        // Convert file to Base64
+        const base64Content = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const result = reader.result;
+                const base64 = result.substring(result.indexOf(',') + 1);
+                resolve(base64);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+
+        // Clean filename
+        const ext = (file.name.split('.').pop() || 'png').toLowerCase();
+        const rawName = file.name.substring(0, file.name.lastIndexOf('.')) || 'image';
+        const sanitized = rawName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+        const filename = `img/upload-${sanitized.substring(0, 20)}-${Date.now()}.${ext}`;
+
+        try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repoName}/contents/${filename}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Upload project image: ${file.name}`,
+                    content: base64Content
+                })
+            });
+
+            if (res.status === 201 || res.status === 200) {
+                const data = await res.json();
+                return {
+                    success: true,
+                    path: filename,
+                    url: data.content ? data.content.download_url : filename,
+                    message: `✅ ¡Imagen subida a tu repositorio de GitHub! Guardada en: ${filename}`
+                };
+            } else {
+                const errData = await res.json().catch(() => ({}));
+                return {
+                    success: false,
+                    path: '',
+                    message: `⚠️ No se pudo subir a GitHub (${errData.message || 'HTTP ' + res.status}). La imagen se usará localmente.`
+                };
+            }
+        } catch (err) {
+            return {
+                success: false,
+                path: '',
+                message: '⚠️ Error de conexión al subir la imagen a GitHub.'
+            };
+        }
     }
 };
 
