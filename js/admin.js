@@ -1,17 +1,110 @@
 /**
- * DEDICATED ADMIN PANEL CONTROLLER - YORDAN ROJAS PORTFOLIO
- * Only loaded on admin.html (separated from public visitors)
+ * DEDICATED ADMIN PANEL & SECURITY CONTROLLER - YORDAN ROJAS PORTFOLIO
+ * Implements SHA-256 Master Password Authentication & Session Management
  */
 
+// Default Hash for "admin123" (Can be changed by user in Settings)
+const DEFAULT_PASSWORD_HASH = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+
 function initAdminPage() {
-    updatePATStatusUI();
-    renderAdminProjectsList();
+    checkAdminSession();
 }
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAdminPage);
 } else {
     initAdminPage();
+}
+
+// ==========================================
+// SECURITY & AUTHENTICATION CONTROLLER (SHA-256)
+// ==========================================
+
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function getStoredPasswordHash() {
+    return localStorage.getItem('admin_password_hash') || DEFAULT_PASSWORD_HASH;
+}
+
+function isSessionAuthenticated() {
+    return sessionStorage.getItem('admin_authenticated') === 'true';
+}
+
+function checkAdminSession() {
+    const loginSection = document.getElementById('adminLoginSection');
+    const mainDashboard = document.getElementById('adminMainDashboard');
+    const logoutBtn = document.getElementById('adminLogoutBtn');
+
+    if (isSessionAuthenticated()) {
+        if (loginSection) loginSection.style.display = 'none';
+        if (mainDashboard) mainDashboard.style.display = 'flex';
+        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+
+        updatePATStatusUI();
+        renderAdminProjectsList();
+    } else {
+        if (loginSection) loginSection.style.display = 'block';
+        if (mainDashboard) mainDashboard.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+    }
+}
+
+async function handleAdminLoginSubmit(event) {
+    event.preventDefault();
+    const inputEl = document.getElementById('adminAuthPassword');
+    const alertEl = document.getElementById('loginStatusAlert');
+    if (!inputEl) return;
+
+    const enteredPassword = inputEl.value.trim();
+    if (!enteredPassword) return;
+
+    const calculatedHash = await hashPassword(enteredPassword);
+    const targetHash = getStoredPasswordHash();
+
+    if (calculatedHash === targetHash) {
+        sessionStorage.setItem('admin_authenticated', 'true');
+        if (alertEl) alertEl.style.display = 'none';
+        inputEl.value = '';
+        checkAdminSession();
+    } else {
+        if (alertEl) {
+            alertEl.style.display = 'block';
+            alertEl.textContent = '❌ Contraseña incorrecta. Acceso denegado.';
+        }
+        inputEl.select();
+    }
+}
+
+function handleAdminLogout() {
+    sessionStorage.removeItem('admin_authenticated');
+    window.location.reload();
+}
+
+async function handleChangeMasterPassword() {
+    const currentPass = prompt('Introduce tu contraseña ACTUAL:');
+    if (!currentPass) return;
+
+    const currentHash = await hashPassword(currentPass);
+    if (currentHash !== getStoredPasswordHash()) {
+        alert('❌ La contraseña actual es incorrecta.');
+        return;
+    }
+
+    const newPass = prompt('Introduce tu NUEVA contraseña (mínimo 6 caracteres):');
+    if (!newPass || newPass.length < 6) {
+        alert('❌ La nueva contraseña debe tener al menos 6 caracteres.');
+        return;
+    }
+
+    const newHash = await hashPassword(newPass);
+    localStorage.setItem('admin_password_hash', newHash);
+    alert('🔒 ¡Contraseña de administrador actualizada correctamente!');
 }
 
 // ==========================================
@@ -219,7 +312,6 @@ function handleSaveProjectForm(event) {
         foundCat = data.projectCategories[0];
     }
 
-    // Check if updating existing
     let existingProj = null;
     data.projectCategories.forEach(cat => {
         const idx = cat.projects.findIndex(p => p.id === id);
@@ -272,7 +364,6 @@ async function handleImageFileSelect(event) {
         return;
     }
 
-    // Instant local preview using Base64 Data URL
     const reader = new FileReader();
     reader.onload = (e) => {
         if (previewImg && previewContainer) {
@@ -285,7 +376,6 @@ async function handleImageFileSelect(event) {
     };
     reader.readAsDataURL(file);
 
-    // Upload to GitHub repository if PAT is available
     if (statusEl) {
         statusEl.style.display = 'block';
         statusEl.style.color = 'var(--accent-cyan)';
@@ -334,7 +424,6 @@ function editProject(projectId) {
     document.getElementById('formProjectDesc').value = target.description || '';
     document.getElementById('formProjectReadme').value = target.readmeMarkdown || '';
 
-    // Load preview if image exists
     const previewContainer = document.getElementById('formImagePreviewContainer');
     const previewImg = document.getElementById('formImagePreview');
     if (target.imageCard && previewContainer && previewImg) {
