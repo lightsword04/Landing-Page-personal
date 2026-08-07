@@ -26,7 +26,7 @@
             </a>
 
             <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-                <button id="adminChangePassBtn" onclick="openChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem; display: none;">
+                <button id="adminChangePassBtn" onclick="openChangePasswordModal()" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem;">
                     🔑 Cambiar Contraseña
                 </button>
                 <button id="adminLogoutBtn" onclick="handleAdminLogout()" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.45rem 0.9rem; display: none; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">
@@ -246,7 +246,7 @@
 
     <!-- 🔑 MODAL PARA CAMBIAR CONTRASEÑA -->
     <div class="demo-overlay" id="changePasswordModal">
-        <div class="demo-modal-container" style="max-width: 480px;">
+        <div class="demo-modal-container" style="max-width: 480px; height: auto; max-height: 90vh; overflow-y: auto;">
             <div class="demo-modal-header">
                 <div class="demo-modal-title">
                     <span style="font-size: 1.3rem;">🔑</span>
@@ -258,7 +258,7 @@
                 <button class="demo-close-btn" onclick="closeChangePasswordModal()" title="Cerrar">✕</button>
             </div>
 
-            <div class="demo-modal-body">
+            <div class="demo-modal-body" style="padding: 1.5rem;">
                 <form id="changePasswordForm" onsubmit="handleSaveNewPasswordForm(event)" style="display: flex; flex-direction: column; gap: 1.1rem;">
                     <div>
                         <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Contraseña Actual *</label>
