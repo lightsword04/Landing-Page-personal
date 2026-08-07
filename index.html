@@ -15,6 +15,9 @@
 
     <!-- Stylesheets & Fonts -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Marked.js Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -43,9 +46,15 @@
                 <li><a href="#contact" class="nav-link">Contacto</a></li>
             </ul>
 
-            <a href="#contact" class="nav-cta">
-                ✉️ Contacto
-            </a>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button onclick="openAdminModal()" class="nav-cta" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color);" title="Gestionar Proyectos & Token PAT">
+                    ⚙️ Admin Proyectos
+                </button>
+
+                <a href="#contact" class="nav-cta">
+                    ✉️ Contacto
+                </a>
+            </div>
 
             <button class="nav-toggle" aria-label="Abrir Menú">☰</button>
         </div>
@@ -302,51 +311,164 @@
     </footer>
 
 
-    <!-- MODAL DE DETALLE TÉCNICO & ARQUITECTURA DEL PROYECTO LABORAL -->
-    <div class="demo-overlay" id="projectDetailOverlay">
-        <div class="demo-modal-container" style="max-width: 1150px;">
+    <!-- MODAL DINÁMICO REUTILIZABLE DE PROYECTO & README -->
+    <div class="demo-overlay" id="dynamicProjectModal">
+        <div class="demo-modal-container" style="max-width: 1000px;">
             <div class="demo-modal-header">
-                <div class="demo-modal-title">
-                    <span style="font-size: 1.5rem;">🛞</span>
+                <div class="demo-modal-title" id="modalProjectTitleContainer">
+                    <span style="font-size: 1.5rem;" id="modalProjectIcon">📦</span>
                     <div>
-                        <h3>Multillantas Macollins — Sistema de Inventario y Ventas</h3>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Backend Java 17 / Spring Boot 3.4.2 & Cliente Multiplataforma Flutter (PC & Mobile)</div>
+                        <h3 id="modalProjectTitle">Detalle del Proyecto</h3>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);" id="modalProjectSubtitle">Información y README del repositorio</div>
                     </div>
                 </div>
-                <button class="demo-close-btn" onclick="closeProjectDetailModal()" title="Cerrar Detalle">✕</button>
+                <button class="demo-close-btn" onclick="closeProjectModal()" title="Cerrar Modal">✕</button>
+            </div>
+
+            <div class="demo-modal-body">
+                <!-- Banner / Imagen Opcional -->
+                <div id="modalProjectImageWrapper" style="display: none; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color-glow); max-height: 360px; background: rgba(10, 15, 26, 0.95); margin-bottom: 1.5rem; justify-content: center; align-items: center; padding: 0.5rem;">
+                    <img id="modalProjectImage" src="" alt="Imagen del proyecto" style="max-width: 100%; max-height: 340px; width: auto; height: auto; object-fit: contain; border-radius: var(--radius-sm);">
+                </div>
+
+                <!-- Botones de Acción en el Modal -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;" id="modalProjectActions">
+                    <!-- Se inyecta botón de GitHub dinámicamente si aplica -->
+                </div>
+
+                <!-- Render de README / Markdown Body -->
+                <div class="markdown-body" id="modalProjectMarkdownBody">
+                    <!-- Contenido Markdown parseado por marked.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE ADMINISTRACIÓN Y CRUD DE PROYECTOS -->
+    <div class="demo-overlay" id="adminProjectsModal">
+        <div class="demo-modal-container" style="max-width: 1100px;">
+            <div class="demo-modal-header">
+                <div class="demo-modal-title">
+                    <span style="font-size: 1.5rem;">⚙️</span>
+                    <div>
+                        <h3>Panel de Administración & CRUD de Proyectos</h3>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Configura tu Token PAT de GitHub, importa repositorios e edita/elimina proyectos dinámicamente</div>
+                    </div>
+                </div>
+                <button class="demo-close-btn" onclick="closeAdminModal()" title="Cerrar Panel">✕</button>
             </div>
 
             <div class="demo-modal-body" style="gap: 2rem;">
-                <!-- Imagen Principal del Dashboard del Sistema -->
-                <div style="border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color-glow); height: 380px; background: rgba(10, 15, 26, 0.95); display: flex; align-items: center; justify-content: center; padding: 0.5rem;">
-                    <img src="img/llantas-dashboard.png" alt="Catálogo de Productos y Dashboard Multillantas Macollins" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: var(--radius-sm);">
-                </div>
+                <!-- SECCIÓN 1: ESTADO DEL TOKEN PAT DE GITHUB -->
+                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
+                    <h4 style="color: var(--accent-cyan); font-size: 1.1rem; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span>🔑 Token de Acceso Personal (PAT de GitHub)</span>
+                        <span id="patStatusBadge" class="pat-badge pat-neutral">⚪ Sin Token PAT</span>
+                    </h4>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
-                    <!-- Columna Backend -->
-                    <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-md);">
-                        <h4 style="color: var(--accent-cyan); font-size: 1.15rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                            ⚙️ Backend REST API (Java 17 & Spring Boot 3.4.2)
-                        </h4>
-                        <ul style="color: var(--text-secondary); font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.6rem; list-style-position: inside;">
-                            <li><strong>Arquitectura en Capas:</strong> Controller, Service (@Transactional), Repository (JpaRepository), Models JPA y DTOs seguros.</li>
-                            <li><strong>Seguridad & RBAC:</strong> JWT Access/Refresh Tokens, BCrypt, StrictHttpFirewall y matriz de roles (DUEÑO, ADMIN, ALMACENERO, VENDEDOR).</li>
-                            <li><strong>Caché & Performance:</strong> Caffeine Cache en memoria para catálogos de alto tráfico.</li>
-                            <li><strong>Servicios Integrados:</strong> Impresión de reportes PDF en tiempo real (OpenPDF), generación de QR (ZXing) y notificaciones Firebase Admin SDK.</li>
-                        </ul>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        El token se guarda <strong>exclusivamente en tu navegador (localStorage)</strong>. Permite a la landing page listar e importar automáticamente tus repositorios <strong>públicos y privados</strong> desde GitHub.
+                    </p>
+
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <input type="password" id="githubPatInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx (GitHub PAT Token)" style="flex: 1; min-width: 260px; padding: 0.65rem 1rem; border-radius: var(--radius-md); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem;">
+                        <button onclick="handleSavePAT()" class="btn btn-primary" style="font-size: 0.85rem;">💾 Guardar & Probar Token</button>
+                        <button onclick="handleRemovePAT()" class="btn btn-secondary" style="font-size: 0.85rem; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;">🗑️ Borrar Token</button>
                     </div>
 
-                    <!-- Columna Frontend -->
-                    <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: var(--radius-md);">
-                        <h4 style="color: var(--accent-purple); font-size: 1.15rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
-                            📱 Cliente Multiplataforma (Flutter PC Desktop & Android)
-                        </h4>
-                        <ul style="color: var(--text-secondary); font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.6rem; list-style-position: inside;">
-                            <li><strong>Gestión Offline Sync:</strong> OfflineHttpClient & SyncService para registrar transacciones sin conexión y sincronizar en segundo plano.</li>
-                            <li><strong>Seguridad en Cliente:</strong> Encriptación AES-256 con FlutterSecureStorage para tokens JWT.</li>
-                            <li><strong>Auto Logout:</strong> SessionTimeoutWrapper para cierre automático por inactividad.</li>
-                            <li><strong>Soporte Desktop PC:</strong> WindowManager configurado para pantalla inicial estandarizada de 1280x720 en Windows PC.</li>
-                        </ul>
+                    <div id="patStatusAlert" style="margin-top: 0.75rem; font-size: 0.85rem; display: none;"></div>
+                </div>
+
+                <!-- SECCIÓN 2: IMPORTADOR DESDE REPOS DE GITHUB -->
+                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h4 style="color: var(--accent-purple); font-size: 1.1rem; margin-bottom: 0.2rem;">📥 Importar Repositorios desde GitHub</h4>
+                            <div style="font-size: 0.82rem; color: var(--text-secondary);">Haz clic en "+ Importar" para agregar automáticamente cualquier repositorio a tu landing page</div>
+                        </div>
+                        <button onclick="handleFetchGitHubRepos()" class="btn btn-secondary" style="font-size: 0.85rem;">🔄 Sincronizar Repositorios de GitHub</button>
+                    </div>
+
+                    <div id="githubReposList" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.6rem; padding-right: 0.5rem;">
+                        <div style="color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 1rem;">Haz clic en "Sincronizar Repositorios" para escanear tu cuenta de GitHub.</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: FORMULARIO CRUD PARA CREAR / EDITAR PROYECTO -->
+                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
+                    <h4 style="color: var(--accent-emerald); font-size: 1.1rem; margin-bottom: 1rem;" id="crudFormTitle">➕ Crear Nuevo Proyecto Personalizado</h4>
+                    
+                    <form id="crudProjectForm" onsubmit="handleSaveProjectForm(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <input type="hidden" id="formProjectId" value="">
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+                            <div>
+                                <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Título del Proyecto *</label>
+                                <input type="text" id="formProjectTitle" required placeholder="Ej: Gestor Financiero IA" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Categoría *</label>
+                                <select id="formProjectCategory" required style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                                    <option value="personales">🚀 Proyecto de Práctica Personal</option>
+                                    <option value="laborales">🏢 Proyecto de Experiencia Laboral</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Insignia / Badge</label>
+                                <input type="text" id="formProjectBadge" placeholder="Ej: PROYECTO PERSONAL EN PYTHON" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Tecnologías (separadas por coma)</label>
+                                <input type="text" id="formProjectTech" placeholder="Python, Flask, Firebase, Machine Learning" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">URL del Repositorio en GitHub</label>
+                                <input type="url" id="formProjectGithubUrl" placeholder="https://github.com/lightsword04/mi-repo" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Ruta de Imagen (Opcional)</label>
+                                <input type="text" id="formProjectImage" placeholder="img/mi-proyecto.png" style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Descripción Breve *</label>
+                            <textarea id="formProjectDesc" required rows="2" placeholder="Resumen del proyecto..." style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem; font-family: inherit;"></textarea>
+                        </div>
+
+                        <div>
+                            <label style="display: block; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Contenido Markdown / README completo</label>
+                            <textarea id="formProjectReadme" rows="5" placeholder="# Título del Proyecto&#10;&#10;Detalles, arquitectura y funcionalidades..." style="width: 100%; padding: 0.6rem 0.8rem; border-radius: var(--radius-sm); background: rgba(10, 15, 26, 0.9); border: 1px solid var(--border-color); color: #fff; font-size: 0.88rem; font-family: monospace;"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                            <button type="button" onclick="cancelProjectEdit()" class="btn btn-secondary" style="font-size: 0.85rem;">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" style="font-size: 0.85rem;">💾 Guardar Proyecto</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- SECCIÓN 4: LISTADO DE PROYECTOS ACTUALES (GESTIÓN DE ACCIONES) -->
+                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                        <h4 style="color: var(--accent-cyan); font-size: 1.1rem;">📋 Proyectos en la Landing Page</h4>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="handleExportProjectsConfig()" class="btn btn-secondary" style="font-size: 0.85rem;" title="Copiar configuración JS para portfolio-data.js">
+                                📋 Exportar portfolio-data.js
+                            </button>
+                            <button onclick="handleResetProjectsData()" class="btn btn-secondary" style="font-size: 0.85rem; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); color: #fca5a5;" title="Restablecer proyectos iniciales">
+                                ↺ Restablecer Iniciales
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="adminProjectsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <!-- Se llena dinámicamente -->
                     </div>
                 </div>
             </div>
@@ -354,6 +476,7 @@
     </div>
 
     <!-- Scripts -->
+    <script src="js/github-service.js"></script>
     <script src="js/portfolio-data.js"></script>
     <script src="js/app.js"></script>
 </body>
