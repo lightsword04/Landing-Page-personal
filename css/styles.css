@@ -1475,4 +1475,198 @@ section {
     border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
+/* ==========================================================================
+   RESPONSIVE DESIGN & MOBILE OPTIMIZATIONS (SMARTPHONES & TABLETS)
+   ========================================================================== */
+
+@media (max-width: 992px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 6vw, 3rem);
+    }
+
+    .demo-modal-container {
+        width: 95%;
+        max-height: 92vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1.25rem;
+    }
+
+    .nav-container {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .nav-links {
+        gap: 0.75rem;
+    }
+
+    .nav-links a {
+        font-size: 0.85rem;
+        padding: 0.35rem 0.6rem;
+    }
+
+    .hero-section {
+        padding: 100px 0 2.5rem 0;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .project-card {
+        max-width: 100%;
+    }
+
+    .project-card-image {
+        height: 180px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    /* Modal Responsive Adjustments */
+    .demo-modal-container {
+        width: 96%;
+        margin: 0 2%;
+        max-height: 94vh;
+        border-radius: var(--radius-md);
+    }
+
+    .demo-modal-header {
+        padding: 1rem 1.25rem;
+    }
+
+    .demo-modal-body {
+        padding: 1.25rem;
+    }
+
+    /* Contact Cards Responsive */
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-item-btn {
+        width: 100%;
+        padding: 0.9rem 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .logo span {
+        font-size: 1.1rem;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+        line-height: 1.2;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .skill-card {
+        padding: 1.25rem;
+    }
+
+    .timeline-item {
+        padding-left: 1rem;
+    }
+
+    /* Strict Image containment & scaling for mobile displays */
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    .project-card-image {
+        height: 160px !important;
+        object-fit: cover !important;
+    }
+
+    #modalProjectImageWrapper {
+        max-height: 220px !important;
+        padding: 0.25rem !important;
+    }
+
+    #modalProjectImage {
+        max-height: 200px !important;
+        object-fit: contain !important;
+    }
+}
+
+/* SMART PHONE / WHATSAPP ACTION CHOICE SHEET */
+.phone-choice-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(7, 9, 14, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.phone-choice-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.phone-choice-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-modal, #0f172a);
+    border: 1px solid var(--border-color-glow, rgba(6, 182, 212, 0.3));
+    border-radius: var(--radius-lg, 16px);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+
 

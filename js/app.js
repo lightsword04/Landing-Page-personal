@@ -209,17 +209,27 @@ function renderProjects() {
 // Dynamic Project & README Modal Controller
 function setupProjectModal() {
     const overlay = document.getElementById('dynamicProjectModal');
-    if (!overlay) return;
+    if (overlay) {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeProjectModal();
+            }
+        });
+    }
 
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-            closeProjectModal();
-        }
-    });
+    const phoneOverlay = document.getElementById('phoneChoiceModal');
+    if (phoneOverlay) {
+        phoneOverlay.addEventListener('click', (e) => {
+            if (e.target === phoneOverlay) {
+                closePhoneChoiceModal();
+            }
+        });
+    }
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && overlay.classList.contains('active')) {
-            closeProjectModal();
+        if (e.key === 'Escape') {
+            if (overlay && overlay.classList.contains('active')) closeProjectModal();
+            if (phoneOverlay && phoneOverlay.classList.contains('active')) closePhoneChoiceModal();
         }
     });
 }
@@ -286,6 +296,40 @@ function closeProjectModal() {
     document.body.style.overflow = 'auto';
 }
 
+// SMART PHONE / WHATSAPP DETECTOR & CONTACT CONTROLLER
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768);
+}
+
+function handlePhoneContactClick(event) {
+    if (event) event.preventDefault();
+
+    const whatsappUrl = "https://wa.me/51971957627?text=" + encodeURIComponent("Hola Yordan, vi tu portafolio personal y me gustaría contactar contigo.");
+
+    if (isMobileDevice()) {
+        openPhoneChoiceModal();
+    } else {
+        window.open(whatsappUrl, '_blank');
+    }
+}
+
+function openPhoneChoiceModal() {
+    const modal = document.getElementById('phoneChoiceModal');
+    if (!modal) {
+        window.open("https://wa.me/51971957627", '_blank');
+        return;
+    }
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePhoneChoiceModal() {
+    const modal = document.getElementById('phoneChoiceModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
 // Deprecated alias for backward compatibility
 function openProjectDetailModal(projectId) {
     openProjectModal(projectId);
@@ -294,6 +338,7 @@ function openProjectDetailModal(projectId) {
 function closeProjectDetailModal() {
     closeProjectModal();
 }
+
 
 
 
